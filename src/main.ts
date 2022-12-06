@@ -3,6 +3,7 @@ import { renderer, scene } from './core/renderer'
 import { fpsGraph, gui } from './core/gui'
 import camera from './core/camera'
 import { controls } from './core/orbit-control'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 import './style.css'
 
@@ -15,11 +16,11 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
 scene.add(ambientLight)
 
 const directionalLight = new THREE.DirectionalLight('#ffffff', 1)
-directionalLight.castShadow = true
-directionalLight.shadow.mapSize.set(1024, 1024)
-directionalLight.shadow.camera.far = 15
-directionalLight.shadow.normalBias = 0.05
-directionalLight.position.set(0.25, 2, 2.25)
+// directionalLight.castShadow = true
+// directionalLight.shadow.mapSize.set(1024, 1024)
+// directionalLight.shadow.camera.far = 15
+// directionalLight.shadow.normalBias = 0.05
+// directionalLight.position.set(0.25, 2, 2.25)
 
 scene.add(directionalLight)
 
@@ -39,7 +40,7 @@ const sphere = new THREE.Mesh(
 
 sphere.position.set(0, 2, 0)
 sphere.castShadow = true
-scene.add(sphere)
+// scene.add(sphere)
 
 const DirectionalLightFolder = gui.addFolder({
   title: 'Directional Light',
@@ -64,7 +65,7 @@ const plane = new THREE.Mesh(
 
 plane.rotation.set(-Math.PI / 2, 0, 0)
 plane.receiveShadow = true
-scene.add(plane)
+// scene.add(plane)
 
 const clock = new THREE.Clock()
 
@@ -81,5 +82,17 @@ const loop = () => {
   fpsGraph.end()
   requestAnimationFrame(loop)
 }
+const loader = new GLTFLoader()
 
+loader.load(
+  '/@/shaders/hedgehog_island_labolatory_fan_art/scene.gltf',
+  function (gltf) {
+    scene.add(gltf.scene)
+    renderer.render(scene, camera)
+  },
+  undefined,
+  function (error) {
+    console.error(error)
+  },
+)
 loop()
